@@ -4,6 +4,9 @@ import { useState } from "react";
 const Board = () => {
   const [squares, setsquares] = useState(Array(9).fill(null));
   const [isXNext, setIsXNext] = useState(true);
+  const [status, setStatus] = useState("player x turn");
+  const [isCompleted, setIsCompleted] = useState(false);
+  let win = "";
 
   console.log("board rerendered");
 
@@ -20,29 +23,49 @@ const Board = () => {
     ];
     for (let i = 0; i < squares_to_check.length; i++) {
       const [a, b, c] = squares_to_check[i];
+      console.log(squares[a], squares[b], squares[c], i);
       if (
         squares[a] &&
         squares[a] === squares[b] &&
         squares[a] === squares[c]
       ) {
-        squares[a] === "X"
-          ? alert("payer X has won")
-          : alert("payer O has won");
+        return squares[a];
       }
     }
+    return;
   };
 
   const handleClick = (index) => {
-    console.log("handleClick)");
+    if (isCompleted || squares[index]) {
+      return;
+    }
+
     const nextSquares = [...squares];
-    isXNext ? (nextSquares[index] = "X") : (nextSquares[index] = "O");
+    const currentPlayer = isXNext ? "X" : "O";
+
+    nextSquares[index] = currentPlayer;
     setsquares(nextSquares);
     setIsXNext(!isXNext);
-    calculateWinner(nextSquares);
+
+    if (!isCompleted) {
+      win = calculateWinner(nextSquares);
+      if (win) {
+        setIsCompleted(true);
+      }
+    }
+    if (win) {
+      setStatus(`Player ${win} has won!`);
+    } else {
+      const nextPlayer = isXNext ? "O" : "X";
+      setStatus(`Player ${nextPlayer} turn`);
+    }
   };
 
   return (
     <>
+      <div>
+        <h2>status: {status}</h2>
+      </div>
       <div className="board-row">
         <Square
           input={squares[0]}
@@ -63,7 +86,8 @@ const Board = () => {
           }}
         />
       </div>
-      <div className="board-row">
+      <div>
+      <div>
         <Square
           input={squares[3]}
           onClick={() => {
@@ -102,6 +126,7 @@ const Board = () => {
             handleClick(8);
           }}
         />
+      </div>
       </div>
     </>
   );

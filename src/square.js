@@ -6,7 +6,7 @@ const Square = memo(({ input, onClick }) => {
   return (
     <button
       className="square"
-      style={{ width: "30px", height: "30px" }}
+      style={{ width: "30px", height: "30px"}}
       onClick={onClick}
     >
       {input}
