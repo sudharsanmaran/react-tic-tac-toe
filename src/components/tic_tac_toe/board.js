@@ -1,12 +1,10 @@
 import Square from "./square";
 import { useState } from "react";
 
-const Board = () => {
-  const [squares, setsquares] = useState(Array(9).fill(null));
-  const [isXNext, setIsXNext] = useState(true);
+const Board = ({squares, isXNext, onPlay}) => {
+  
   const [status, setStatus] = useState("player x turn");
   const [isCompleted, setIsCompleted] = useState(false);
-  let win = "";
 
   console.log("board rerendered");
 
@@ -23,7 +21,6 @@ const Board = () => {
     ];
     for (let i = 0; i < squares_to_check.length; i++) {
       const [a, b, c] = squares_to_check[i];
-      console.log(squares[a], squares[b], squares[c], i);
       if (
         squares[a] &&
         squares[a] === squares[b] &&
@@ -44,17 +41,13 @@ const Board = () => {
     const currentPlayer = isXNext ? "X" : "O";
 
     nextSquares[index] = currentPlayer;
-    setsquares(nextSquares);
-    setIsXNext(!isXNext);
+    onPlay(nextSquares)
 
-    if (!isCompleted) {
-      win = calculateWinner(nextSquares);
-      if (win) {
-        setIsCompleted(true);
-      }
-    }
-    if (win) {
-      setStatus(`Player ${win} has won!`);
+    const winner = calculateWinner(nextSquares);
+
+    if (winner) {
+      setStatus(`Player ${winner} has won!`);
+      setIsCompleted(true);
     } else {
       const nextPlayer = isXNext ? "O" : "X";
       setStatus(`Player ${nextPlayer} turn`);
@@ -87,46 +80,46 @@ const Board = () => {
         />
       </div>
       <div>
-      <div>
-        <Square
-          input={squares[3]}
-          onClick={() => {
-            handleClick(3);
-          }}
-        />
-        <Square
-          input={squares[4]}
-          onClick={() => {
-            handleClick(4);
-          }}
-        />
-        <Square
-          input={squares[5]}
-          onClick={() => {
-            handleClick(5);
-          }}
-        />
-      </div>
-      <div className="board-row">
-        <Square
-          input={squares[6]}
-          onClick={() => {
-            handleClick(6);
-          }}
-        />
-        <Square
-          input={squares[7]}
-          onClick={() => {
-            handleClick(7);
-          }}
-        />
-        <Square
-          input={squares[8]}
-          onClick={() => {
-            handleClick(8);
-          }}
-        />
-      </div>
+        <div>
+          <Square
+            input={squares[3]}
+            onClick={() => {
+              handleClick(3);
+            }}
+          />
+          <Square
+            input={squares[4]}
+            onClick={() => {
+              handleClick(4);
+            }}
+          />
+          <Square
+            input={squares[5]}
+            onClick={() => {
+              handleClick(5);
+            }}
+          />
+        </div>
+        <div className="board-row">
+          <Square
+            input={squares[6]}
+            onClick={() => {
+              handleClick(6);
+            }}
+          />
+          <Square
+            input={squares[7]}
+            onClick={() => {
+              handleClick(7);
+            }}
+          />
+          <Square
+            input={squares[8]}
+            onClick={() => {
+              handleClick(8);
+            }}
+          />
+        </div>
       </div>
     </>
   );

@@ -1,5 +1,6 @@
-import Board from "./board";
+import Game from "./components/tic_tac_toe/game";
+
 function App() {
-  return <Board />;
+  return <Game />;
 }
 export default App;

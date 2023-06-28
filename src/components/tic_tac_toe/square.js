@@ -1,7 +1,6 @@
 import { memo } from "react";
 
 const Square = memo(({ input, onClick }) => {
-  console.log("Square rerendered");
 
   return (
     <button
